@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "growpi"
+version = "0.1.0"
+description = "GrowPi is a Raspberry Pi-based IoT system for collecting and transmitting environmental sensor data, such as temperature and humidity. It includes Python scripts for sensor readings, a local API for on-demand measurements, and a data sender that pushes readings to a central backend. Designed for integration with a full-stack thesis project, GrowPi ensures efficient data collection and real-time monitoring."
+readme = "README.rst"
+authors = [
+  {name = "Andrew Browne", email = "andy.maildrop@gmail.com"}
+]
+maintainers = [
+  {name = "Andrew Browne", email = "andy.maildrop@gmail.com"}
+]
+classifiers = [
+
+]
+license = {text = "MIT license"}
+dependencies = [
+  "typer"
+]
+
+[project.optional-dependencies]
+dev = [
+    "coverage",  # testing
+    "mypy",  # linting
+    "pytest",  # testing
+    "ruff"  # linting
+]
+
+[project.urls]
+
+bugs = "https://github.com/frankenwino/growpi/issues"
+changelog = "https://github.com/frankenwino/growpi/blob/master/changelog.md"
+homepage = "https://github.com/frankenwino/growpi"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+"*" = ["*.*"]
+
+
+
+
+# Mypy
+# ----
+
+[tool.mypy]
+files = "."
+
+# Use strict defaults
+strict = true
+warn_unreachable = true
+warn_no_return = true
+
+[[tool.mypy.overrides]]
+# Don't require test functions to include types
+module = "tests.*"
+allow_untyped_defs = true
+disable_error_code = "attr-defined"
+
