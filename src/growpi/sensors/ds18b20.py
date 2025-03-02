@@ -38,7 +38,7 @@ class DS18B20(Sensor):
             return {
                 "sensor": self.name,
                 "error": "Sensor not found",
-                "date_time": get_utc_datetime()
+                "date_time_utc": get_utc_datetime()
             }
             
         lines = self._read_raw_data()

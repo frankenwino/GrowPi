@@ -39,7 +39,7 @@ class AM2301(Sensor):
                 "sensor": self.name,
                 "temperature": round(temperature, 2),
                 "humidity": round(humidity, 2),
-                "date_time": get_utc_datetime()
+                "date_time_utc": get_utc_datetime()
             }
         except RuntimeError as e:
             # return {

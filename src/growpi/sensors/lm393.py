@@ -28,7 +28,7 @@ class LM393:
         return {
             "light_detected": self.dark_or_light(sensor_value),
             "sensor": self.name,
-            "date_time": get_utc_datetime()
+            "date_time_utc": get_utc_datetime()
         }
 
     def cleanup(self):
