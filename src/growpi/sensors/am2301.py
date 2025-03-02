@@ -23,6 +23,7 @@ class AM2301(Sensor):
         self.pin = pin
         self.name = name
 
+    @staticmethod
     def read_data(self):
         """
         Reads temperature and humidity data from the sensor.
