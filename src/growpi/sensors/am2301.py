@@ -1,47 +1,51 @@
-import Adafruit_DHT
+import time
+import board
+import adafruit_dht
 from sensors.sensor_interface import Sensor
+from utils.now import get_utc_datetime
 
 class AM2301(Sensor):
     """
-    Interface for the AM2303 (DHT22) temperature and humidity sensor.
+    AM2301 Temperature and Humidity Sensor.
 
-    This class provides methods to interact with the AM2303/DHT22 sensor
-    using the Adafruit_DHT library. The sensor measures both temperature
-    and relative humidity.
-
-    Parameters
-    ----------
-    pin : int
-        The GPIO pin number where the sensor is connected.
-
-    Attributes
-    ----------
-    _pin : int
-        The GPIO pin number used by the sensor.
-    sensor : Adafruit_DHT.AM2302
-        The sensor type identifier.
-
-    Examples
-    --------
-    >>> sensor = AM2303(pin=4)
-    >>> data = sensor.read_data()
-    >>> print(f"Temperature: {data['temperature']}°C, Humidity: {data['humidity']}%")
-
-    Raises
-    ------
-    ValueError
-        If the sensor data cannot be read successfully.
+    Attributes:
+        pin (int): The GPIO pin number the sensor is connected to.
     """
-    def __init__(self, pin):
-        self._pin = pin
-        self.sensor = Adafruit_DHT.AM2301
-        
+
+    def __init__(self, pin, name):
+        """
+        Initializes the AM2301 sensor.
+
+        Parameters:
+            pin (int): The GPIO pin number.
+        """
+        self.sensor = adafruit_dht.DHT22(getattr(board, f"D{pin}"), use_pulseio=False)
+        self.pin = pin
+        self.name = name
+
     def read_data(self):
-        humidity, temperature = Adafruit_DHT.read_retry(self.sensor, self._pin)
-        if humidity is None or temperature is None:
-            raise ValueError('Failed to read data from sensor')
-        
-        return {
-            'temperature': temperature,
-            'humidity': humidity
-        }
+        """
+        Reads temperature and humidity data from the sensor.
+
+        Returns:
+            dict: A dictionary containing temperature and humidity.
+        """
+        try:
+            temperature = self.sensor.temperature
+            humidity = self.sensor.humidity
+            return {
+                "temperature": round(temperature, 2),
+                "humidity": round(humidity, 2),
+                "sensor": self.name,
+                "date_time": get_utc_datetime()
+            }
+        except RuntimeError as e:
+            print(f"Error reading AM2301 sensor: {e}")
+            return None
+
+# if __name__ == "__main__":
+#     sensor = AM2301()
+#     while True:
+#         data = sensor.read_data()
+#         print(f"Temperature: {data['temperature']}°C, Humidity: {data['humidity']}%")
+#         time.sleep(2)

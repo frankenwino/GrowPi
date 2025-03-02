@@ -1,7 +1,12 @@
 [
     {
-        "type": "AM2302",
+        "type": "AM2301",
+        "pin": 23,
+        "name": "AM2301"
+    },
+    {
+        "type": "DS18B20",
         "pin": 4,
-        "name": "AM2302"
+        "name": "DS18B20"
     }
 ]
