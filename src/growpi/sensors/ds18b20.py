@@ -3,10 +3,11 @@ import time
 from sensors.sensor_interface import Sensor
 from utils.now import get_utc_datetime
 
+
 class DS18B20(Sensor):
     """
     DS18B20 Temperature Sensor Class.
-    
+
     Reads temperature data from the 1-Wire interface on a Raspberry Pi.
     """
 
@@ -38,24 +39,25 @@ class DS18B20(Sensor):
             return {
                 "sensor": self.name,
                 "error": "Sensor not found",
-                "date_time_utc": get_utc_datetime()
+                "date_time_utc": get_utc_datetime(),
             }
-            
+
         lines = self._read_raw_data()
-        
+
         while lines[0].strip()[-3:] != "YES":
             time.sleep(0.2)
             lines = self._read_raw_data()
 
         temp_output = lines[1].split("t=")[-1]
-        
+
         if temp_output:
             return {
                 "sensor": self.name,
                 "temperature": round(float(temp_output) / 1000.0, 1),
-                "date_time": get_utc_datetime()
+                "date_time": get_utc_datetime(),
             }
         return None
+
 
 # if __name__ == "__main__":
 #     sensor = DS18B20()

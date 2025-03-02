@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Sensor(ABC):
     """
     Abstract base class for all sensors.
@@ -12,7 +13,7 @@ class Sensor(ABC):
     read_data()
         Abstract method to read data from the sensor. Must be implemented by subclasses.
     """
-    
+
     @abstractmethod
     def read_data(self):
         pass

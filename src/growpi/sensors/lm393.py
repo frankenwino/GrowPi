@@ -1,10 +1,11 @@
 import RPi.GPIO as GPIO
 from utils.now import get_utc_datetime
 
+
 class LM393:
     """
     LM393 Light Sensor Class.
-    
+
     Reads light intensity data from a light-dependent resistor (LDR) connected to a GPIO pin.
     """
 
@@ -18,17 +19,17 @@ class LM393:
     def read_data(self):
         """
         Reads light intensity data from the sensor.
-        
+
         Returns:
             dict: A dictionary containing light intensity and timestamp.
         """
         sensor_value = GPIO.input(self.pin)
         # self.cleanup()
-        
+
         return {
             "light_detected": self.dark_or_light(sensor_value),
             "sensor": self.name,
-            "date_time_utc": get_utc_datetime()
+            "date_time_utc": get_utc_datetime(),
         }
 
     def cleanup(self):

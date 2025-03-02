@@ -4,6 +4,7 @@ import adafruit_dht
 from sensors.sensor_interface import Sensor
 from utils.now import get_utc_datetime
 
+
 class AM2301(Sensor):
     """
     AM2301 Temperature and Humidity Sensor.
@@ -23,7 +24,6 @@ class AM2301(Sensor):
         self.pin = pin
         self.name = name
 
-
     # @staticmethod
     def read_data(self):
         """
@@ -39,7 +39,7 @@ class AM2301(Sensor):
                 "sensor": self.name,
                 "temperature": round(temperature, 2),
                 "humidity": round(humidity, 2),
-                "date_time_utc": get_utc_datetime()
+                "date_time_utc": get_utc_datetime(),
             }
         except RuntimeError as e:
             # return {
@@ -49,6 +49,7 @@ class AM2301(Sensor):
             # }
             print(f"Error reading AM2301 sensor: {e}")
             return None
+
 
 # if __name__ == "__main__":
 #     sensor = AM2301()
