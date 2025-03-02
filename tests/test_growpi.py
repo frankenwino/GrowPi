@@ -5,7 +5,7 @@
 import pytest
 
 
-from growpi import growpi
+from growpi import main
 
 
 @pytest.fixture
