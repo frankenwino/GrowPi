@@ -1,8 +1,9 @@
 import RPi.GPIO as GPIO
 from utils.now import get_utc_datetime
+from sensors.sensor_interface import Sensor
 
 
-class LM393:
+class LM393(Sensor):
     """
     LM393 Light Sensor Class.
 
