@@ -8,5 +8,10 @@
         "type": "DS18B20",
         "pin": 4,
         "name": "DS18B20"
+    },
+    {
+        "type": "LM393",
+        "pin": 26,
+        "name": "LM393"
     }
 ]
