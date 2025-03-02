@@ -21,7 +21,14 @@ def list_sensors():
     """List all available sensors and their types."""
     return {"available_sensors": [sensor.__class__.__name__ for sensor in sensors]}
 
+@app.get("/sensor/{sensor_name}")
+def get_sensor_reading(sensor_name: str):
+    """Fetch data from a specific sensor by name."""
+    for sensor in sensors:
+        if sensor.__class__.__name__.lower() == sensor_name.lower():
+            return sensor.read_data()
 
+    return {"error": f"Sensor '{sensor_name}' not found"}
 
 if __name__ == "__main__":
     import uvicorn

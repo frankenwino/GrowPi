@@ -12,11 +12,15 @@ class DS18B20(Sensor):
 
     def __init__(self, pin, name):
         """Initialize sensor by finding the device file."""
-        base_dir = "/sys/bus/w1/devices/"
-        device_folder = glob.glob(base_dir + "28*")[0]  # Find sensor directory
-        self.device_file = device_folder + "/w1_slave"
         self.pin = pin
         self.name = name
+        base_dir = "/sys/bus/w1/devices/"
+        try:
+            device_folder = glob.glob(base_dir + "28*")[0]
+            self.device_file = device_folder + "/w1_slave"
+        except IndexError:
+            print(f"Warning: DS18B20 sensor not found at {base_dir}28*")
+            self.device_file = None
 
     def _read_raw_data(self):
         """Reads raw temperature data from the sensor."""
@@ -30,16 +34,25 @@ class DS18B20(Sensor):
         Returns:
             float: Temperature in Celsius.
         """
+        if self.device_file is None:
+            return {
+                "sensor": self.name,
+                "error": "Sensor not found",
+                "date_time": get_utc_datetime()
+            }
+            
         lines = self._read_raw_data()
+        
         while lines[0].strip()[-3:] != "YES":
             time.sleep(0.2)
             lines = self._read_raw_data()
 
         temp_output = lines[1].split("t=")[-1]
+        
         if temp_output:
             return {
-                "temperature": round(float(temp_output) / 1000.0, 1),
                 "sensor": self.name,
+                "temperature": round(float(temp_output) / 1000.0, 1),
                 "date_time": get_utc_datetime()
             }
         return None

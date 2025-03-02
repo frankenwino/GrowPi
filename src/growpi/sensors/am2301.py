@@ -23,7 +23,8 @@ class AM2301(Sensor):
         self.pin = pin
         self.name = name
 
-    @staticmethod
+
+    # @staticmethod
     def read_data(self):
         """
         Reads temperature and humidity data from the sensor.
@@ -35,12 +36,17 @@ class AM2301(Sensor):
             temperature = self.sensor.temperature
             humidity = self.sensor.humidity
             return {
+                "sensor": self.name,
                 "temperature": round(temperature, 2),
                 "humidity": round(humidity, 2),
-                "sensor": self.name,
                 "date_time": get_utc_datetime()
             }
         except RuntimeError as e:
+            # return {
+            #     "error": f"Error reading AM2301 sensor: {e}",
+            #     "sensor": self.name,
+            #     "date_time": get_utc_datetime()
+            # }
             print(f"Error reading AM2301 sensor: {e}")
             return None
 

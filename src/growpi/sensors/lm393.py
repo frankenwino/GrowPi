@@ -23,7 +23,7 @@ class LM393:
             dict: A dictionary containing light intensity and timestamp.
         """
         sensor_value = GPIO.input(self.pin)
-        self.cleanup()
+        # self.cleanup()
         
         return {
             "light_detected": self.dark_or_light(sensor_value),
