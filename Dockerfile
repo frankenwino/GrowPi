@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.13-slim-bookworm
 
 COPY requirements.txt /app/
 COPY src /app/src
