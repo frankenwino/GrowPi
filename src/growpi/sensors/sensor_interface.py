@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+from typing import Any, Dict
 
 
-class Sensor(ABC):
+class SensorInterface(ABC):
     """
     Abstract base class for all sensors.
 
@@ -15,5 +16,6 @@ class Sensor(ABC):
     """
 
     @abstractmethod
-    def read_data(self):
+    def read_data(self) -> Dict[str, Any]:
+        """Return sensor data as a dictionary."""
         pass

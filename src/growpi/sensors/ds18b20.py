@@ -1,10 +1,10 @@
 import glob
 import time
-from sensors.sensor_interface import Sensor
+from sensors.sensor_interface import SensorInterface
 from utils.now import get_utc_datetime
 
 
-class DS18B20(Sensor):
+class DS18B20(SensorInterface):
     """
     DS18B20 Temperature Sensor Class.
 

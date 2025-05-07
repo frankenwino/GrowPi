@@ -1,11 +1,12 @@
 import time
 import board
 import adafruit_dht
-from sensors.sensor_interface import Sensor
+import RPi.GPIO as GPIO
+from sensors.sensor_interface import SensorInterface
 from utils.now import get_utc_datetime
 
 
-class AM2301(Sensor):
+class AM2301(SensorInterface):
     """
     AM2301 Temperature and Humidity Sensor.
 
@@ -20,6 +21,7 @@ class AM2301(Sensor):
         Parameters:
             pin (int): The GPIO pin number.
         """
+        GPIO.setmode(GPIO.BCM)
         self.sensor = adafruit_dht.DHT22(getattr(board, f"D{pin}"), use_pulseio=False)
         self.pin = pin
         self.name = name

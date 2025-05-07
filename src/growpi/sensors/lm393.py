@@ -1,9 +1,9 @@
 import RPi.GPIO as GPIO
 from utils.now import get_utc_datetime
-from sensors.sensor_interface import Sensor
+from sensors.sensor_interface import SensorInterface
 
 
-class LM393(Sensor):
+class LM393(SensorInterface):
     """
     LM393 Light Sensor Class.
 
@@ -25,11 +25,11 @@ class LM393(Sensor):
             dict: A dictionary containing light intensity and timestamp.
         """
         sensor_value = GPIO.input(self.pin)
-        # self.cleanup()
+        self.cleanup()
 
         return {
-            "light_detected": self.dark_or_light(sensor_value),
             "sensor": self.name,
+            "light_detected": self.light_detected(sensor_value),
             "date_time_utc": get_utc_datetime(),
         }
 
@@ -37,29 +37,16 @@ class LM393(Sensor):
         """Cleans up the GPIO settings."""
         GPIO.cleanup()
 
-    def dark_or_light(self, sensor_readout):
+    def light_detected(self, sensor_readout):
         """Determine if it's dark or light based on the sensor readout."""
-        if sensor_readout == 0:
-            return True  # Light detected
-        else:
-            return False  # Dark detected
+        return sensor_readout == 0  # True if light is detected
 
 
 # if __name__ == '__main__':
 #     from pprint import pprint
 
-#     # Create an instance of the LM393 class
-#     pin = 37  # Physical pin number
+#     pin = 21 # physical pin 40
 #     sensor = LM393(pin, "LM393")
 
-#     # Read data from the sensor
-#     sensor_data = sensor.read_data()
 
-#     # Determine if it is light or dark
-#     result = sensor.dark_or_light(sensor_data["light_intensity"])
-
-#     # Cleanup GPIO resources
-#     sensor.cleanup()
-
-#     # Print the result
-#     pprint(result)
+#     pprint(sensor.read_data())

@@ -1,37 +1,26 @@
-# """Main module."""
-# # print("Hello, GrowPi!")
-import json
-from sensors.sensor_factory import create_sensor
+from fastapi import FastAPI
+from sensor_check import load_sensors_from_config
 
-# from utils.api_handler import post_data
+app = FastAPI()
 
+sensors = load_sensors_from_config()
 
-def load_sensors_from_config(config_file="sensors.json"):
-    """Loads sensor configurations from a JSON file and initializes them."""
-    with open(config_file, "r") as file:
-        sensor_configs = json.load(file)
-
-    sensors = []
-    for config in sensor_configs:
-        sensor_type = config.pop("type")
-        sensor = create_sensor(sensor_type, **config)
-        sensors.append(sensor)
-
-    return sensors
+@app.get("/")
+async def read_root():
+    return {"Hello": "World"}
 
 
-def main():
-    sensors = load_sensors_from_config()
+@app.get("/sensors")
+async def list_sensors():
+    """List all available sensors and their types."""
+    return {"available_sensors": [sensor.__class__.__name__ for sensor in sensors]}
 
+
+@app.get("/sensor/{sensor_name}")
+async def get_sensor_reading(sensor_name: str):
+    """Fetch data from a specific sensor by name."""
     for sensor in sensors:
-        try:
-            data = sensor.read_data()
-            print(data)
-            # response = post_data(data)
-            # print(f"Data from {sensor.__class__.__name__} posted successfully:", response)
-        except Exception as e:
-            print(f"Error with {sensor.__class__.__name__}:", e)
+        if sensor.__class__.__name__.lower() == sensor_name.lower():
+            return sensor.read_data()
 
-
-if __name__ == "__main__":
-    main()
+    return {"error": f"Sensor '{sensor_name}' not found"}
