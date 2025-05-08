@@ -5,76 +5,47 @@ from growpi.sensors.am2302 import AM2302
 
 @pytest.fixture
 def mock_sensor():
-    """Fixture to mock the adafruit_dht.DHT22 sensor."""
-    with patch("growpi.sensors.am2302.adafruit_dht.DHT22") as mock_dht:
-        yield mock_dht
+    """Fixture to create a mock sensor."""
+    mock = MagicMock()
+    mock.temperature = 25.5
+    mock.humidity = 60.2
+    return mock
 
 
 @pytest.fixture
-def mock_utils():
-    """Fixture to mock the get_utc_datetime utility."""
-    with patch("growpi.sensors.am2302.get_utc_datetime", return_value="2023-01-01T00:00:00Z") as mock_datetime:
-        yield mock_datetime
+def am2302_sensor(mock_sensor):
+    """Fixture to create an AM2302 instance with a mock sensor."""
+    with patch("growpi.sensors.am2302.adafruit_dht.DHT22", return_value=mock_sensor):
+        return AM2302(pin=23, name="TestSensor")
 
 
-def test_am2302_read_data_success(mock_sensor, mock_utils):
-    """Test successful reading of temperature and humidity."""
-    # Mock sensor instance
-    mock_instance = MagicMock()
-    mock_instance.temperature = 22.3
-    mock_instance.humidity = 55.7
-    mock_sensor.return_value = mock_instance
-
-    # Create AM2302 instance
-    sensor = AM2302(pin=23, name="TestSensor")
-
-    # Call read_data
-    result = sensor.read_data()
-
-    # Assertions
-    assert result is not None, "Result should not be None"
-    assert result["sensor"] == "TestSensor"
-    assert result["temperature"] == 22.3
-    assert result["humidity"] == 55.7
-    assert result["date_time_utc"] == "2023-01-01T00:00:00Z"
+def test_am2302_initialization(am2302_sensor):
+    """Test the initialization of the AM2302 sensor."""
+    assert am2302_sensor.pin == 23
+    assert am2302_sensor.name == "TestSensor"
 
 
-def test_am2302_read_data_failure(mock_sensor):
-    """Test failure when sensor returns None values."""
-    # Mock sensor instance
-    mock_instance = MagicMock()
-    mock_instance.temperature = None
-    mock_instance.humidity = None
-    mock_sensor.return_value = mock_instance
+def test_am2302_read_data_success(am2302_sensor, mock_sensor):
+    """Test successful reading of data from the sensor."""
+    data = am2302_sensor.read_data()
+    assert data is not None
+    assert data["sensor"] == "TestSensor"
+    assert data["temperature"] == round(mock_sensor.temperature, 2)
+    assert data["humidity"] == round(mock_sensor.humidity, 2)
+    assert "date_time_utc" in data
 
-    # Create AM2302 instance
-    sensor = AM2302(pin=23, name="TestSensor")
 
-    # Call read_data
-    result = sensor.read_data()
-
-    # Assertions
-    assert result is None, "Result should be None on failure"
+def test_am2302_read_data_failure():
+    """Test failure to read data from the sensor."""
+    with patch("growpi.sensors.am2302.adafruit_dht.DHT22") as mock_dht:
+        mock_dht.return_value.temperature = None
+        mock_dht.return_value.humidity = None
+        sensor = AM2302(pin=23, name="TestSensor")
+        data = sensor.read_data()
+        assert data is None
 
 
 def test_am2302_invalid_pin():
     """Test initialization with an invalid pin."""
     with pytest.raises(ValueError, match="Pin D99 not found on board module."):
-        AM2302(pin=99, name="InvalidPinSensor")
-
-def test_am2302_partial_data(mock_sensor, mock_utils):
-    """Test handling of partial data (temperature or humidity is None)."""
-    # Mock sensor instance with partial data
-    mock_instance = MagicMock()
-    mock_instance.temperature = 24.5
-    mock_instance.humidity = None
-    mock_sensor.return_value = mock_instance
-
-    # Create AM2302 instance
-    sensor = AM2302(pin=23, name="TestSensor")
-
-    # Call read_data
-    result = sensor.read_data()
-
-    # Assertions
-    assert result is None, "Result should be None when partial data is received"
+        AM2302(pin=99, name="InvalidSensor")

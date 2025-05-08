@@ -16,16 +16,16 @@ class AM2301(SensorInterface):
         name (str): A human-readable identifier for the sensor.
     """
 
-    def __init__(self, pin, name):
+    def __init__(self, pin, name, sensor=None):
         GPIO.setmode(GPIO.BCM)
         self.pin = pin
         self.name = name
 
-        # Try mapping pin to board.DXX
         try:
             gpio_attr = f"D{pin}"
             board_pin = getattr(board, gpio_attr)
-            self.sensor = adafruit_dht.DHT21(board_pin)
+            # self.sensor = adafruit_dht.DHT21(board_pin)
+            self.sensor = sensor or adafruit_dht.DHT21(board_pin)
         except AttributeError:
             raise ValueError(f"Pin D{pin} not found in board module.")
 

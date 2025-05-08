@@ -15,7 +15,7 @@ class AM2302(SensorInterface):
         pin (int): The BCM GPIO pin number the sensor is connected to.
     """
 
-    def __init__(self, pin, name):
+    def __init__(self, pin, name, sensor=None):
         """
         Initializes the AM2301 sensor.
 
@@ -31,7 +31,8 @@ class AM2302(SensorInterface):
         try:
             gpio_attr = f"D{pin}"
             board_pin = getattr(board, gpio_attr)
-            self.sensor = adafruit_dht.DHT22(board_pin, use_pulseio=False)
+            # self.sensor = adafruit_dht.DHT22(board_pin, use_pulseio=False)
+            self.sensor = sensor or adafruit_dht.DHT22(board_pin, use_pulseio=False)
         except AttributeError:
             raise ValueError(f"Pin D{pin} not found on board module.")
 
