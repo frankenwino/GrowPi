@@ -8,7 +8,7 @@ sensors = load_sensors_from_config()
 
 @app.get("/")
 async def read_root():
-    return {"Hello": "World"}
+    return {"msg": "GrowPi API is running"}
 
 
 @app.get("/sensors")
