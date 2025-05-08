@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import atexit
 from utils.now import get_utc_datetime
 from sensors.sensor_interface import SensorInterface
 
@@ -17,6 +18,9 @@ class LM393(SensorInterface):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.IN)
 
+        # Cleanup GPIO at exit
+        atexit.register(GPIO.cleanup)
+
     def read_data(self):
         """
         Reads light intensity data from the sensor.
@@ -25,28 +29,21 @@ class LM393(SensorInterface):
             dict: A dictionary containing light intensity and timestamp.
         """
         sensor_value = GPIO.input(self.pin)
-        self.cleanup()
-
         return {
             "sensor": self.name,
             "light_detected": self.light_detected(sensor_value),
             "date_time_utc": get_utc_datetime(),
         }
 
-    def cleanup(self):
-        """Cleans up the GPIO settings."""
-        GPIO.cleanup()
-
     def light_detected(self, sensor_readout):
         """Determine if it's dark or light based on the sensor readout."""
         return sensor_readout == 0  # True if light is detected
 
 
-# if __name__ == '__main__':
-#     from pprint import pprint
+if __name__ == "__main__":
+    from pprint import pprint
 
-#     pin = 21 # physical pin 40
-#     sensor = LM393(pin, "LM393")
+    pin = 21  # physical pin 40
+    sensor = LM393(pin, "LM393")
 
-
-#     pprint(sensor.read_data())
+    pprint(sensor.read_data())

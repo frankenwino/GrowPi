@@ -6,6 +6,7 @@ import atexit
 from sensors.sensor_interface import SensorInterface
 from utils.now import get_utc_datetime
 
+
 class AM2302(SensorInterface):
     """
     AM2302 Temperature and Humidity Sensor.
@@ -68,7 +69,9 @@ if __name__ == "__main__":
     while True:
         data = sensor.read_data()
         if data:
-            print(f"Temperature: {data['temperature']}°C, Humidity: {data['humidity']}%")
+            print(
+                f"Temperature: {data['temperature']}°C, Humidity: {data['humidity']}%"
+            )
         else:
             print("Sensor read failed. Retrying...")
         time.sleep(2)

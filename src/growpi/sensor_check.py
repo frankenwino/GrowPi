@@ -1,12 +1,17 @@
 import json
+import os
 from sensors.sensor_factory import create_sensor
 from pprint import pprint
+
 # from utils.api_handler import post_data
 
 
 def load_sensors_from_config(config_file="sensors.json"):
     """Loads sensor configurations from a JSON file and initializes them."""
-    with open(config_file, "r") as file:
+
+    config_file_path = os.path.join(os.path.dirname(__file__), config_file)
+
+    with open(config_file_path, "r") as file:
         sensor_configs = json.load(file)
 
     sensors = []

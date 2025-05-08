@@ -5,6 +5,7 @@ app = FastAPI()
 
 sensors = load_sensors_from_config()
 
+
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}

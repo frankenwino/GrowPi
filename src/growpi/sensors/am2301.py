@@ -63,7 +63,9 @@ if __name__ == "__main__":
     while True:
         data = sensor.read_data()
         if data:
-            print(f"Temperature: {data['temperature']}°C, Humidity: {data['humidity']}%")
+            print(
+                f"Temperature: {data['temperature']}°C, Humidity: {data['humidity']}%"
+            )
         else:
             print("Sensor read failed. Retrying...")
         time.sleep(2)

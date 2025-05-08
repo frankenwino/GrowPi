@@ -35,6 +35,10 @@ bugs = "https://github.com/frankenwino/growpi/issues"
 changelog = "https://github.com/frankenwino/growpi/blob/master/changelog.md"
 homepage = "https://github.com/frankenwino/growpi"
 
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
