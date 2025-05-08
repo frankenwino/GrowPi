@@ -22,9 +22,10 @@ GrowPi is a Raspberry Pi-based IoT system for collecting and transmitting enviro
 * Free software: MIT license
 * Documentation: https://growpi.readthedocs.io.
 
-Installaion
+Installation
 ------------
 sudo apt install python3-dev
+make sure Pythonpath has the path to the growpi directory
 
 Features
 --------
