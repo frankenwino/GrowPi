@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+import main
 from main import app
 
 client = TestClient(app)
@@ -11,10 +12,8 @@ def test_read_main():
 
 
 def test_list_sensors_with_valid_api_key(monkeypatch):
-    # Mock the API_KEYS environment variable
     monkeypatch.setenv("API_KEYS", "test_key")
 
-    # Pass the valid API key in the query parameter
     response = client.get("/sensors", headers={"x-api-key": "test_key"})
     assert response.status_code == 200
     assert "available_sensors" in response.json()
@@ -22,72 +21,53 @@ def test_list_sensors_with_valid_api_key(monkeypatch):
 
 
 def test_list_sensors_with_invalid_api_key():
-    # Pass an invalid API key
     response = client.get("/sensors", headers={"x-api-key": "invalid_key"})
     assert response.status_code == 401
     assert response.json() == {"detail": "Invalid or missing API Key"}
 
 
 def test_list_sensors_without_api_key():
-    # Do not pass any API key
     response = client.get("/sensors")
     assert response.status_code == 401
     assert response.json() == {"detail": "Invalid or missing API Key"}
 
-    def test_get_sensor_reading_with_valid_api_key(monkeypatch):
-        # Mock the API_KEYS environment variable
-        monkeypatch.setenv("API_KEYS", "test_key")
 
-        # Mock the sensors list with a fake sensor
-        class MockSensor:
-            def __class__(self):
-                return self
-
-            def __name__(self):
-                return "MockSensor"
-
-            def read_data(self):
-                return {"temperature": 25, "humidity": 60}
-
-        monkeypatch.setattr("main.sensors", [MockSensor()])
-
-        # Pass the valid API key and request the sensor data
-        response = client.get("/sensor/MockSensor", headers={"x-api-key": "test_key"})
-        assert response.status_code == 200
-        assert response.json() == {"temperature": 25, "humidity": 60}
-
-
-def test_get_sensor_reading_with_invalid_api_key(monkeypatch):
-    # Mock the API_KEYS environment variable
+def test_get_sensor_reading_with_valid_api_key(monkeypatch):
     monkeypatch.setenv("API_KEYS", "test_key")
 
-    # Mock the sensors list with a fake sensor
     class MockSensor:
-        def __class__(self):
-            return self
-
-        def __name__(self):
-            return "MockSensor"
-
         def read_data(self):
             return {"temperature": 25, "humidity": 60}
 
-    monkeypatch.setattr("main.sensors", [MockSensor()])
+    MockSensor.__name__ = "MockSensor"
 
-    # Pass an invalid API key and request the sensor data
+    monkeypatch.setattr(main, "sensors", [MockSensor()])
+
+    response = client.get("/sensor/MockSensor", headers={"x-api-key": "test_key"})
+    assert response.status_code == 200
+    assert response.json() == {"temperature": 25, "humidity": 60}
+
+
+def test_get_sensor_reading_with_invalid_api_key(monkeypatch):
+    monkeypatch.setenv("API_KEYS", "test_key")
+
+    class MockSensor:
+        def read_data(self):
+            return {"temperature": 25, "humidity": 60}
+
+    MockSensor.__name__ = "MockSensor"
+    monkeypatch.setattr(main, "sensors", [MockSensor()])
+
     response = client.get("/sensor/MockSensor", headers={"x-api-key": "invalid_key"})
     assert response.status_code == 401
     assert response.json() == {"detail": "Invalid or missing API Key"}
 
 
 def test_get_sensor_reading_with_non_existent_sensor(monkeypatch):
-    # Mock the API_KEYS environment variable
     monkeypatch.setenv("API_KEYS", "test_key")
 
-    # Mock the sensors list with no matching sensor
     monkeypatch.setattr("main.sensors", [])
 
-    # Pass the valid API key and request a non-existent sensor
     response = client.get(
         "/sensor/NonExistentSensor", headers={"x-api-key": "test_key"}
     )
