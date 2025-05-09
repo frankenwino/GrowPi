@@ -12,9 +12,11 @@ sensors = load_sensors_from_config()
 api_key_query = APIKeyQuery(name="api-key", auto_error=False)
 api_key_header = APIKeyHeader(name="x-api-key", auto_error=False)
 
+
 def get_api_keys() -> list[str]:
     keys = os.getenv("API_KEYS", "")
     return [k.strip() for k in keys.split(",") if k.strip()]
+
 
 def get_api_key(
     api_key_query: str = Security(api_key_query),
@@ -33,7 +35,7 @@ def get_api_key(
         HTTPException: If the API key is invalid or missing.
     """
     valid_keys = get_api_keys()
-    
+
     if api_key_query in valid_keys:
         return api_key_query
     if api_key_header in valid_keys:

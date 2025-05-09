@@ -21,13 +21,17 @@ def am2302_sensor(mock_sensor):
 
 def test_am2302_initialization(am2302_sensor):
     """Test the initialization of the AM2302 sensor."""
+    # Assert
     assert am2302_sensor.pin == 23
     assert am2302_sensor.name == "TestSensor"
 
 
 def test_am2302_read_data_success(am2302_sensor, mock_sensor):
     """Test successful reading of data from the sensor."""
+    # Arrange/Act
     data = am2302_sensor.read_data()
+
+    # Assert
     assert data is not None
     assert data["sensor"] == "TestSensor"
     assert data["temperature"] == round(mock_sensor.temperature, 2)
@@ -37,15 +41,21 @@ def test_am2302_read_data_success(am2302_sensor, mock_sensor):
 
 def test_am2302_read_data_failure():
     """Test failure to read data from the sensor."""
+    # Arrange
     with patch("growpi.sensors.am2302.adafruit_dht.DHT22") as mock_dht:
         mock_dht.return_value.temperature = None
         mock_dht.return_value.humidity = None
         sensor = AM2302(pin=23, name="TestSensor")
+
+        # Act
         data = sensor.read_data()
+
+        # Assert
         assert data is None
 
 
 def test_am2302_invalid_pin():
     """Test initialization with an invalid pin."""
+    # Arrange/Act
     with pytest.raises(ValueError, match="Pin D99 not found on board module."):
         AM2302(pin=99, name="InvalidSensor")
