@@ -39,7 +39,7 @@ class DS18B20(SensorInterface):
             return {
                 "sensor": self.name,
                 "error": "Sensor not found",
-                "date_time_utc": get_utc_datetime(),
+                "reading_timestamp_utc": get_utc_datetime(),
             }
 
         lines = self._read_raw_data()

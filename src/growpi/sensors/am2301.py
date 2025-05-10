@@ -50,7 +50,7 @@ class AM2301(SensorInterface):
                 "sensor": self.name,
                 "temperature": round(temperature, 2),
                 "humidity": round(humidity, 2),
-                "date_time_utc": get_utc_datetime(),
+                "reading_timestamp_utc": get_utc_datetime(),
             }
 
         except RuntimeError as e:

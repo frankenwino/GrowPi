@@ -57,7 +57,7 @@ def test_read_data_sensor_not_found(mock_datetime, mock_glob):
     # Assert
     assert result["sensor"] == "TestSensor"
     assert result["error"] == "Sensor not found"
-    assert result["date_time_utc"] == "2023-01-01T00:00:00Z"
+    assert result["reading_timestamp_utc"] == "2023-01-01T00:00:00Z"
 
 
 @patch("builtins.open", new_callable=mock_open, read_data="YES\n t=-5000")

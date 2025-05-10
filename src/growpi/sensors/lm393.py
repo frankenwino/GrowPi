@@ -32,7 +32,7 @@ class LM393(SensorInterface):
         return {
             "sensor": self.name,
             "light_detected": self.light_detected(sensor_value),
-            "date_time_utc": get_utc_datetime(),
+            "reading_timestamp_utc": get_utc_datetime(),
         }
 
     def light_detected(self, sensor_readout):

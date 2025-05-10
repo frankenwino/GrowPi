@@ -36,7 +36,7 @@ def test_am2302_read_data_success(am2302_sensor, mock_sensor):
     assert data["sensor"] == "TestSensor"
     assert data["temperature"] == round(mock_sensor.temperature, 2)
     assert data["humidity"] == round(mock_sensor.humidity, 2)
-    assert "date_time_utc" in data
+    assert "reading_timestamp_utc" in data
 
 
 def test_am2302_read_data_failure():

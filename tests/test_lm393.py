@@ -45,7 +45,7 @@ def test_read_data_light_detected(mock_gpio, mock_get_utc_datetime, lm393_sensor
     # Assert
     assert data["sensor"] == "LM393"
     assert data["light_detected"] is True
-    assert data["date_time_utc"] == "2023-01-01T00:00:00Z"
+    assert data["reading_timestamp_utc"] == "2023-01-01T00:00:00Z"
 
 
 def test_read_data_no_light_detected(mock_gpio, mock_get_utc_datetime, lm393_sensor):
@@ -58,4 +58,4 @@ def test_read_data_no_light_detected(mock_gpio, mock_get_utc_datetime, lm393_sen
     # Assert
     assert data["sensor"] == "LM393"
     assert data["light_detected"] is False
-    assert data["date_time_utc"] == "2023-01-01T00:00:00Z"
+    assert data["reading_timestamp_utc"] == "2023-01-01T00:00:00Z"
