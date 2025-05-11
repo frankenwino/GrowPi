@@ -41,7 +41,7 @@ def test_read_data_success(mock_datetime, mock_glob, mock_file):
     # Assert
     assert result["sensor"] == "TestSensor"
     assert result["temperature"] == 21.6
-    assert result["date_time"] == "2023-01-01T00:00:00Z"
+    assert result["reading_timestamp_utc"] == "2023-01-01T00:00:00Z"
 
 
 @patch("growpi.sensors.ds18b20.glob.glob")
@@ -74,7 +74,7 @@ def test_read_data_negative_temperature(mock_datetime, mock_glob, mock_file):
     # Assert
     assert result["sensor"] == "TestSensor"
     assert result["temperature"] == -5.0
-    assert result["date_time"] == "2023-01-01T00:00:00Z"
+    assert result["reading_timestamp_utc"] == "2023-01-01T00:00:00Z"
 
 
 @patch("builtins.open", new_callable=mock_open, read_data="YES\n t=")

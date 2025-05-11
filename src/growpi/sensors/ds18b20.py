@@ -54,7 +54,7 @@ class DS18B20(SensorInterface):
             return {
                 "sensor": self.name,
                 "temperature": round(float(temp_output) / 1000.0, 1),
-                "date_time": get_utc_datetime(),
+                "reading_timestamp_utc": get_utc_datetime(),
             }
         return None
 
