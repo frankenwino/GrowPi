@@ -18,5 +18,20 @@
         "type": "LM393",
         "pin": 21,
         "name": "LM393"
+    },
+    {
+        "type": "CO2Dummy",
+        "pin": 22,
+        "name": "CO2Dummy"
+    },
+    {
+        "type": "ECDummy",
+        "pin": 25,
+        "name": "ECDummy"
+    },
+    {
+        "type": "PHDummy",
+        "pin": 26,
+        "name": "PHDummy"
     }
 ]
