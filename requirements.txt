@@ -50,7 +50,7 @@ RPi.GPIO==0.7.1
 rpi_ws281x==5.0.0
 shellingham==1.5.4
 sniffio==1.3.1
-starlette==0.49.1
+starlette==1.0.1
 sysv_ipc==1.1.0
 typer==0.15.3
 typing_extensions==4.12.2
